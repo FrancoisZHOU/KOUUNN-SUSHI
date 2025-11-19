@@ -13,7 +13,6 @@
             color: white;
             margin: 0;
             padding: 0;
-            /* 使用 dvh 确保在 Safari 中高度正确 */
             height: 100vh;
             height: 100dvh; 
             display: flex;
@@ -29,7 +28,6 @@
         header {
             background-color: #e67e22;
             padding: 10px 15px;
-            /* 顶部安全距离 */
             padding-top: calc(10px + env(safe-area-inset-top)); 
             box-shadow: 0 2px 10px rgba(0,0,0,0.3);
             z-index: 10;
@@ -293,6 +291,7 @@
 
 <header>
     <div class="header-left">
+        <!-- Logo 图片引用 -->
         <img src="logo.png" alt="Logo" class="logo-img" onerror="this.style.display='none'">
         <div class="header-text">
             <h1>KOUUNN SUSHI</h1>
@@ -340,19 +339,19 @@
             </ul>
             <p>👉 <b>Conseil :</b> Servez vite ceux qui attendent depuis longtemps !</p>
         </div>
-        <!-- 开始按钮：调用修复了音频逻辑的函数 -->
+        <!-- 开始按钮 -->
         <button class="btn-start" onclick="startGame()">OUVRIR LE RESTO</button>
     </div>
 </div>
 
 <script>
     // --- 游戏配置 ---
-    // 时间配置 (time / 30 = 秒数)
+    // 18秒: 540 ticks
     const TYPES = {
-        WEB: { label: 'Site Web', icon: '💻', color: 'type-web', time: 540, prep: 30, food: '🍣' }, // 18秒
-        PHONE: { label: 'Téléphone', icon: '📞', color: 'type-phone', time: 540, prep: 30, food: '🍱' }, // 18秒
-        URGENT: { label: 'URGENT', icon: '⚡', color: 'type-urgent', time: 300, prep: 30, food: '🍙' }, // 10秒
-        UBER: { label: 'Uber Eats', icon: '🚲', color: 'type-uber', time: 540, prep: 30, food: '🥡' } // 18秒
+        WEB: { label: 'Site Web', icon: '💻', color: 'type-web', time: 540, prep: 30, food: '🍣' }, 
+        PHONE: { label: 'Téléphone', icon: '📞', color: 'type-phone', time: 540, prep: 30, food: '🍱' }, 
+        URGENT: { label: 'URGENT', icon: '⚡', color: 'type-urgent', time: 300, prep: 30, food: '🍙' }, 
+        UBER: { label: 'Uber Eats', icon: '🚲', color: 'type-uber', time: 540, prep: 30, food: '🥡' } 
     };
 
     // 全局变量
@@ -370,7 +369,7 @@
     let gameLoopId;
     let spawnTimeout;
 
-    // --- 音频系统 (修复iOS问题) ---
+    // 音效系统
     const AudioContext = window.AudioContext || window.webkitAudioContext;
     let audioCtx;
     
@@ -380,34 +379,43 @@
         console.log("Audio not supported");
     }
     
-    // 结束音乐对象
+    // 结束音乐加载
     let endMusic = new Audio('end.mp3');
-    endMusic.loop = false;
+    endMusic.loop = false; // 不循环播放
 
-    // 关键修复：解锁音频的函数
+    // 关键修复：静音解锁法
     function unlockAudio() {
-        // 1. 解锁 Web Audio API (短音效)
+        // 1. 解锁 Web Audio
         if (audioCtx && audioCtx.state === 'suspended') {
             audioCtx.resume().catch(e => {});
         }
         
-        // 2. 解锁 HTML5 Audio (结束音乐) - 关键点！
-        // 播放一瞬间然后立刻暂停，骗过iOS的机制
+        // 2. 解锁 HTML5 Audio (End Music)
+        // 先把音量设为0 (静音)
+        endMusic.volume = 0;
+        
+        // 播放一下
         let promise = endMusic.play();
+        
         if (promise !== undefined) {
             promise.then(_ => {
+                // 成功播放后，立刻暂停
                 endMusic.pause();
+                // 进度条归零
                 endMusic.currentTime = 0;
+                // 把音量恢复，为游戏结束做准备
+                endMusic.volume = 1.0; 
             }).catch(error => {
-                // 即使失败也不要报错，防止游戏卡住
                 console.log("Audio autoplay prevented");
             });
         }
     }
 
-    // 播放短音效 (切菜/成功/失败)
+    // 播放短音效
     function playSound(type) {
         if (!audioCtx) return;
+        if (audioCtx.state === 'suspended') audioCtx.resume().catch(e=>{});
+
         try {
             const osc = audioCtx.createOscillator();
             const gain = audioCtx.createGain();
@@ -433,31 +441,33 @@
 
     // --- 核心逻辑：开始游戏 ---
     function startGame() {
-        // iOS修复第一步：在这里调用解锁函数
-        // 因为 startGame 是由用户点击触发的，所以这里是解锁音频的唯一机会
+        // 关键：在这里调用静音解锁
         unlockAudio();
 
         document.getElementById('modal').style.display = 'none';
-
-        // 重置变量
+        
+        // 重置游戏数据
         orders = []; 
         score = 0; 
         reputation = 5; 
-        gameTimeMin = 1050; 
+        gameTimeMin = 1050; // 17:30
         gameActive = true; 
         activeOrderId = null; 
         resetWork();
         
+        // 刷新界面
         updateUI(); 
         updateClock(); 
         renderOrders();
         
+        // 初始生成
         spawnOrder(); 
 
+        // 清理并启动循环
         if (gameLoopId) clearInterval(gameLoopId);
         clearTimeout(spawnTimeout);
 
-        gameLoopId = setInterval(loop, 100); 
+        gameLoopId = setInterval(loop, 100); // 0.1秒刷新一次
         scheduleNextSpawn();
     }
 
@@ -473,7 +483,7 @@
             updateClock();
         }
 
-        // 2. 耐心流失 (1.5倍速度 = 3)
+        // 2. 耐心流失 (3点/tick)
         let failed = false;
         orders.forEach(o => {
             o.patience -= 3; 
@@ -489,7 +499,7 @@
             if (reputation <= 0) endGame();
         }
 
-        // 3. 工作进度
+        // 3. 工作进度处理
         if (isWorking && activeOrderId !== null) {
             const order = orders.find(o => o.id === activeOrderId);
             if (order) {
@@ -505,7 +515,7 @@
             }
         }
         
-        // 4. 更新UI
+        // 4. 更新耐心条UI
         orders.forEach(o => {
             const bar = document.getElementById(`bar-${o.id}`);
             if (bar) {
@@ -516,21 +526,25 @@
         });
     }
 
-    // --- 生成订单 ---
+    // --- 生成订单逻辑 ---
     function scheduleNextSpawn() {
         if (!gameActive) return;
         
         let delay = 4000; 
+
         if (gameTimeMin < 1050) {
             delay = 4000;
         } else if (gameTimeMin >= 1050 && gameTimeMin < 1110) {
+            // 17:30 - 18:30 加速
             let progress = (gameTimeMin - 1050) / 60; 
             delay = 4000 - (3000 * progress);
         } else if (gameTimeMin >= 1110 && gameTimeMin < 1170) {
+            // 18:30 - 19:30 极速
             delay = 1000; 
         } else if (gameTimeMin >= 1170) {
             delay = 2600;
         }
+        
         delay = delay * (0.8 + Math.random() * 0.4);
         
         clearTimeout(spawnTimeout);
@@ -539,9 +553,11 @@
 
     function spawnOrder() {
         if (!gameActive) return;
+        
         let rand = Math.random();
         let typeKey = 'WEB'; 
         let isRush = (gameTimeMin >= 1110 && gameTimeMin < 1170);
+
         if (isRush) {
             if (rand < 0.40) typeKey = 'URGENT';
             else if (rand < 0.60) typeKey = 'UBER';
@@ -553,24 +569,28 @@
             else if (rand < 0.70) typeKey = 'PHONE';
             else typeKey = 'WEB';
         }
+
         const t = TYPES[typeKey];
         const newOrder = {
             id: Date.now() + Math.random(),
             typeKey: typeKey, ...t,
             maxPatience: t.time, patience: t.time, prepNeeded: t.prep
         };
+        
         orders.push(newOrder);
         playSound('new');
         renderOrders();
         if (activeOrderId === null) selectOrder(newOrder.id);
     }
 
+    // --- 时钟与颜色 ---
     function updateClock() {
         let h = Math.floor(gameTimeMin / 60);
         let m = gameTimeMin % 60;
         let timeStr = `${h}:${m < 10 ? '0'+m : m}`;
         let clockEl = document.getElementById('clock');
         clockEl.innerText = timeStr;
+        
         let r = 255, g = 255, b = 255; 
         if (gameTimeMin >= 1050 && gameTimeMin < 1110) {
             let progress = (gameTimeMin - 1050) / 60; 
@@ -584,10 +604,11 @@
             clockEl.style.color = progress < 0.5 ? 'white' : '#333';
         }
         clockEl.style.backgroundColor = `rgb(${r},${g},${b})`;
+        
         if (gameTimeMin >= 1260) winGame();
     }
 
-    // --- 交互 ---
+    // --- 玩家交互 ---
     function selectOrder(id) {
         if (activeOrderId === id) return;
         activeOrderId = id;
@@ -627,6 +648,7 @@
         updateUI(); renderOrders();
     }
 
+    // --- 渲染与更新 ---
     function renderOrders() {
         const list = document.getElementById('order-list');
         list.innerHTML = '';
@@ -670,7 +692,8 @@
         clearInterval(gameLoopId); 
         clearTimeout(spawnTimeout);
         
-        // 播放结束音乐 (现在因为在startGame里解锁过，所以这里iOS也允许播放了)
+        // 播放结束音乐 (因为已经在startGame里静音解锁过，这里可以放心播放)
+        endMusic.volume = 1.0; // 确保音量回来
         endMusic.play().catch(e => console.log("Music failed", e));
 
         showModal("C'est la panique ! 🤯", `
@@ -689,6 +712,7 @@
         clearInterval(gameLoopId); 
         clearTimeout(spawnTimeout);
         
+        endMusic.volume = 1.0;
         endMusic.play().catch(e => console.log("Music failed", e));
 
         showModal("Service Terminé ! 🎉", `
