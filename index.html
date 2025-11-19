@@ -2,7 +2,6 @@
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <!-- 适配 iPhone 刘海屏和底部横条 -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <title>KOUUNN SUSHI : Le Challenge</title>
     <style>
@@ -37,165 +36,60 @@
             align-items: center;
         }
         
-        .header-left {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        /* Logo 样式 */
-        .logo-img {
-            width: 45px;
-            height: 45px;
-            object-fit: contain;
-            background: white;
-            border-radius: 50%;
-            border: 2px solid white;
-        }
-
-        .header-text h1 {
-            margin: 0;
-            font-size: 16px;
-            font-weight: 800;
-            letter-spacing: 1px;
-            line-height: 1.2;
-        }
-
-        .reputation-stars {
-            color: gold;
-            letter-spacing: 2px;
-            font-size: 12px;
-        }
+        .header-left { display: flex; align-items: center; gap: 10px; }
+        .logo-img { width: 45px; height: 45px; object-fit: contain; background: white; border-radius: 50%; border: 2px solid white; }
+        .header-text h1 { margin: 0; font-size: 16px; font-weight: 800; letter-spacing: 1px; line-height: 1.2; }
+        .reputation-stars { color: gold; letter-spacing: 2px; font-size: 12px; }
         
         .clock-box {
-            background: #fff; 
-            color: #333; 
-            padding: 8px 12px;
-            border-radius: 8px; 
-            font-weight: 800; 
-            font-family: monospace;
-            font-size: 20px;
-            border: 3px solid #333;
-            transition: background-color 0.5s, color 0.5s;
-            min-width: 70px;
-            text-align: center;
+            background: #fff; color: #333; padding: 8px 12px; border-radius: 8px; 
+            font-weight: 800; font-family: monospace; font-size: 20px;
+            border: 3px solid #333; transition: background-color 0.5s, color 0.5s;
+            min-width: 70px; text-align: center;
         }
 
         /* --- 游戏主区域 --- */
         #game-container {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            padding: 10px;
-            gap: 10px;
-            overflow: hidden;
-            max-width: 600px;
-            width: 100%;
-            margin: 0 auto;
-            box-sizing: border-box;
-            position: relative;
+            flex: 1; display: flex; flex-direction: column; padding: 10px; gap: 10px;
+            overflow: hidden; max-width: 600px; width: 100%; margin: 0 auto;
+            box-sizing: border-box; position: relative;
         }
 
-        .queue-header {
-            display: flex;
-            justify-content: space-between;
-            color: #bdc3c7;
-            font-size: 12px;
-            text-transform: uppercase;
-            flex-shrink: 0;
-        }
+        .queue-header { display: flex; justify-content: space-between; color: #bdc3c7; font-size: 12px; text-transform: uppercase; flex-shrink: 0; }
 
         /* --- 订单列表 --- */
         #order-list {
-            flex: 1;
-            overflow-y: auto;
-            background: #34495e;
-            border-radius: 8px;
-            padding: 8px;
-            border: 2px solid #7f8c8d;
-            scrollbar-width: thin;
+            flex: 1; overflow-y: auto; background: #34495e; border-radius: 8px;
+            padding: 8px; border: 2px solid #7f8c8d; scrollbar-width: thin;
             padding-bottom: 20px; 
         }
 
         .order-card {
-            background: white;
-            color: #333;
-            padding: 10px;
-            margin-bottom: 8px;
-            border-radius: 6px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            cursor: pointer;
-            border-left: 6px solid #bdc3c7;
-            position: relative;
-            transition: transform 0.1s;
+            background: white; color: #333; padding: 10px; margin-bottom: 8px;
+            border-radius: 6px; display: flex; justify-content: space-between; align-items: center;
+            cursor: pointer; border-left: 6px solid #bdc3c7; position: relative; transition: transform 0.1s;
         }
-
-        .order-card.active {
-            background-color: #fff3e0;
-            border: 2px solid #e67e22;
-            transform: translateX(5px);
-        }
+        .order-card.active { background-color: #fff3e0; border: 2px solid #e67e22; transform: translateX(5px); }
         
         .type-web { border-left-color: #3498db; }
         .type-phone { border-left-color: #9b59b6; }
         .type-urgent { border-left-color: #e74c3c; }
         .type-uber { border-left-color: #27ae60; }
 
-        .order-detail {
-            display: flex;
-            flex-direction: column;
-            width: 100%;
-        }
-
-        .order-top {
-            display: flex;
-            justify-content: space-between;
-            font-weight: bold;
-            font-size: 15px;
-        }
-
-        .patience-bar-bg {
-            height: 8px;
-            background: #eee;
-            border-radius: 4px;
-            margin-top: 6px;
-            width: 100%;
-        }
-
-        .patience-bar-fill {
-            height: 100%;
-            background: #2ecc71;
-            border-radius: 4px;
-            transition: width 0.1s linear;
-        }
+        .order-detail { display: flex; flex-direction: column; width: 100%; }
+        .order-top { display: flex; justify-content: space-between; font-weight: bold; font-size: 15px; }
+        .patience-bar-bg { height: 8px; background: #eee; border-radius: 4px; margin-top: 6px; width: 100%; }
+        .patience-bar-fill { height: 100%; background: #2ecc71; border-radius: 4px; transition: width 0.1s linear; }
 
         /* --- 底部厨房 --- */
         #kitchen-area {
-            flex-shrink: 0;
-            background: #222; 
-            border-radius: 12px 12px 0 0;
-            padding: 10px 15px;
-            /* 底部安全距离 */
+            flex-shrink: 0; background: #222; border-radius: 12px 12px 0 0; padding: 10px 15px;
             padding-bottom: calc(20px + env(safe-area-inset-bottom)); 
-            border-top: 4px solid #e67e22;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            box-shadow: 0 -5px 20px rgba(0,0,0,0.5);
-            z-index: 20;
+            border-top: 4px solid #e67e22; display: flex; flex-direction: column; align-items: center;
+            box-shadow: 0 -5px 20px rgba(0,0,0,0.5); z-index: 20;
         }
 
-        .chef-stage {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            height: 50px;
-            margin-bottom: 5px;
-            position: relative;
-        }
-
+        .chef-stage { display: flex; align-items: center; justify-content: center; height: 50px; margin-bottom: 5px; position: relative; }
         .boss-icon { font-size: 45px; transition: transform 0.1s; }
         .knife-icon { font-size: 30px; position: absolute; right: -20px; top: 0; opacity: 0; }
         .cutting .knife-icon { opacity: 1; animation: chop 0.2s infinite alternate; }
@@ -203,71 +97,28 @@
         @keyframes chop { from { transform: rotate(0deg) translateY(0); } to { transform: rotate(-30deg) translateY(10px); } }
 
         #action-btn {
-            width: 100%;
-            height: 60px;
-            border: none;
-            border-radius: 35px;
-            background-color: #7f8c8d;
-            color: white;
-            font-size: 20px;
-            font-weight: bold;
-            cursor: pointer;
-            position: relative;
-            overflow: hidden;
-            box-shadow: 0 4px #555;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
+            width: 100%; height: 60px; border: none; border-radius: 35px;
+            background-color: #7f8c8d; color: white; font-size: 20px; font-weight: bold;
+            cursor: pointer; position: relative; overflow: hidden;
+            box-shadow: 0 4px #555; display: flex; align-items: center; justify-content: center; gap: 10px;
             touch-action: manipulation;
         }
-
         #action-btn.ready { background-color: #e67e22; box-shadow: 0 4px #d35400; }
         #action-btn.ready:active { transform: translateY(2px); box-shadow: 0 2px #d35400; }
         
-        .btn-progress {
-            position: absolute;
-            left: 0; top: 0; bottom: 0; width: 0%;
-            background: rgba(255,255,255,0.3);
-            pointer-events: none;
-            transition: width 0.05s linear;
-        }
+        .btn-progress { position: absolute; left: 0; top: 0; bottom: 0; width: 0%; background: rgba(255,255,255,0.3); pointer-events: none; transition: width 0.05s linear; }
 
         /* --- 弹窗 --- */
         #modal {
-            display: flex; 
-            position: fixed; 
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.95);
-            z-index: 2147483647;
-            justify-content: center; align-items: center; padding: 20px;
-            box-sizing: border-box;
+            display: flex; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.95); z-index: 2147483647;
+            justify-content: center; align-items: center; padding: 20px; box-sizing: border-box;
         }
-
-        .modal-content {
-            background: white;
-            color: #333;
-            padding: 25px;
-            border-radius: 10px;
-            text-align: center;
-            max-width: 360px;
-            width: 100%;
-            position: relative;
-        }
+        .modal-content { background: white; color: #333; padding: 25px; border-radius: 10px; text-align: center; max-width: 360px; width: 100%; position: relative; }
         
         .btn-start { 
-            background: #e67e22;
-            color: white;
-            border: none;
-            padding: 15px 0;
-            font-size: 20px;
-            border-radius: 30px; 
-            margin-top: 15px;
-            cursor: pointer;
-            width: 100%;
-            font-weight: bold;
-            box-shadow: 0 4px #d35400;
-            touch-action: manipulation;
+            background: #e67e22; color: white; border: none; padding: 15px 0; font-size: 20px; border-radius: 30px; 
+            margin-top: 15px; cursor: pointer; width: 100%; font-weight: bold; box-shadow: 0 4px #d35400; touch-action: manipulation;
         }
         .btn-start:active { transform: translateY(2px); box-shadow: 0 2px #d35400; }
         
@@ -275,15 +126,8 @@
         @keyframes bounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-5px); } }
 
         .message-box {
-            background: #f8f9fa;
-            border-left: 4px solid #e67e22;
-            padding: 10px;
-            text-align: left;
-            font-size: 14px;
-            color: #555;
-            font-style: italic;
-            margin-bottom: 10px;
-            line-height: 1.4;
+            background: #f8f9fa; border-left: 4px solid #e67e22; padding: 10px;
+            text-align: left; font-size: 14px; color: #555; font-style: italic; margin-bottom: 10px; line-height: 1.4;
         }
     </style>
 </head>
@@ -291,7 +135,6 @@
 
 <header>
     <div class="header-left">
-        <!-- Logo 图片引用 -->
         <img src="logo.png" alt="Logo" class="logo-img" onerror="this.style.display='none'">
         <div class="header-text">
             <h1>KOUUNN SUSHI</h1>
@@ -315,7 +158,6 @@
             <div class="knife-icon">🔪</div>
             <div style="position:absolute; left: -50px; font-size: 45px;" id="sushi-visual">🍣</div>
         </div>
-        <!-- 操作按钮 -->
         <button id="action-btn" 
             ontouchstart="startWork(event)" onmousedown="startWork(event)" 
             ontouchend="stopWork(event)" onmouseup="stopWork(event)">
@@ -339,14 +181,12 @@
             </ul>
             <p>👉 <b>Conseil :</b> Servez vite ceux qui attendent depuis longtemps !</p>
         </div>
-        <!-- 开始按钮 -->
         <button class="btn-start" onclick="startGame()">OUVRIR LE RESTO</button>
     </div>
 </div>
 
 <script>
     // --- 游戏配置 ---
-    // 18秒: 540 ticks
     const TYPES = {
         WEB: { label: 'Site Web', icon: '💻', color: 'type-web', time: 540, prep: 30, food: '🍣' }, 
         PHONE: { label: 'Téléphone', icon: '📞', color: 'type-phone', time: 540, prep: 30, food: '🍱' }, 
@@ -354,57 +194,46 @@
         UBER: { label: 'Uber Eats', icon: '🚲', color: 'type-uber', time: 540, prep: 30, food: '🥡' } 
     };
 
-    // 全局变量
     let orders = [];
     let score = 0;
     let reputation = 5;
     let gameActive = false;
-    let gameTimeMin = 1050; // 17:30
+    let gameTimeMin = 1050;
     let timeSpeed = 0;
-    
     let activeOrderId = null;
     let workProgress = 0;
     let isWorking = false;
-    
     let gameLoopId;
     let spawnTimeout;
 
     // 音效系统
     const AudioContext = window.AudioContext || window.webkitAudioContext;
     let audioCtx;
+    try { audioCtx = new AudioContext(); } catch(e) { console.log("Audio not supported"); }
     
-    try {
-        audioCtx = new AudioContext();
-    } catch(e) {
-        console.log("Audio not supported");
-    }
-    
-    // 结束音乐加载
+    // 结束音乐对象
     let endMusic = new Audio('end.mp3');
-    endMusic.loop = false; // 不循环播放
+    endMusic.loop = false; 
 
-    // 关键修复：静音解锁法
+    // 修复iOS：使用 .muted 属性代替 volume，因为iOS忽略volume
     function unlockAudio() {
-        // 1. 解锁 Web Audio
+        // 1. Web Audio
         if (audioCtx && audioCtx.state === 'suspended') {
             audioCtx.resume().catch(e => {});
         }
         
-        // 2. 解锁 HTML5 Audio (End Music)
-        // 先把音量设为0 (静音)
-        endMusic.volume = 0;
-        
-        // 播放一下
+        // 2. HTML5 Audio (结束音乐) - 关键修复！
+        // 先静音
+        endMusic.muted = true; 
+        // 播放
         let promise = endMusic.play();
         
         if (promise !== undefined) {
             promise.then(_ => {
-                // 成功播放后，立刻暂停
+                // 成功开始播放后，立刻暂停
                 endMusic.pause();
-                // 进度条归零
                 endMusic.currentTime = 0;
-                // 把音量恢复，为游戏结束做准备
-                endMusic.volume = 1.0; 
+                // 此时不取消静音，等真正需要播放时再取消
             }).catch(error => {
                 console.log("Audio autoplay prevented");
             });
@@ -415,14 +244,12 @@
     function playSound(type) {
         if (!audioCtx) return;
         if (audioCtx.state === 'suspended') audioCtx.resume().catch(e=>{});
-
         try {
             const osc = audioCtx.createOscillator();
             const gain = audioCtx.createGain();
             osc.connect(gain);
             gain.connect(audioCtx.destination);
             const now = audioCtx.currentTime;
-
             if (type === 'chop') {
                 osc.type = 'square'; osc.frequency.setValueAtTime(150, now);
                 gain.gain.setValueAtTime(0.1, now); osc.start(now); osc.stop(now+0.05);
@@ -439,83 +266,52 @@
         } catch (e) {}
     }
 
-    // --- 核心逻辑：开始游戏 ---
+    // --- 核心逻辑 ---
     function startGame() {
-        // 关键：在这里调用静音解锁
+        // 调用静音解锁
         unlockAudio();
 
         document.getElementById('modal').style.display = 'none';
+
+        // 重置
+        orders = []; score = 0; reputation = 5; gameTimeMin = 1050;
+        gameActive = true; activeOrderId = null; resetWork();
         
-        // 重置游戏数据
-        orders = []; 
-        score = 0; 
-        reputation = 5; 
-        gameTimeMin = 1050; // 17:30
-        gameActive = true; 
-        activeOrderId = null; 
-        resetWork();
-        
-        // 刷新界面
-        updateUI(); 
-        updateClock(); 
-        renderOrders();
-        
-        // 初始生成
+        updateUI(); updateClock(); renderOrders();
         spawnOrder(); 
 
-        // 清理并启动循环
         if (gameLoopId) clearInterval(gameLoopId);
         clearTimeout(spawnTimeout);
 
-        gameLoopId = setInterval(loop, 100); // 0.1秒刷新一次
+        gameLoopId = setInterval(loop, 100);
         scheduleNextSpawn();
     }
 
-    // --- 游戏主循环 ---
     function loop() {
         if (!gameActive) return;
-
-        // 1. 时间流速 (1秒 = 10 ticks = 1分钟)
         timeSpeed++;
-        if (timeSpeed >= 10) { 
-            gameTimeMin++;
-            timeSpeed = 0;
-            updateClock();
-        }
-
-        // 2. 耐心流失 (3点/tick)
+        if (timeSpeed >= 10) { gameTimeMin++; timeSpeed = 0; updateClock(); }
         let failed = false;
         orders.forEach(o => {
             o.patience -= 3; 
-            if (o.patience <= 0) {
-                failed = true; reputation--; playSound('fail');
-            }
+            if (o.patience <= 0) { failed = true; reputation--; playSound('fail'); }
         });
-
         if (failed) {
             orders = orders.filter(o => o.patience > 0);
             if (!orders.find(o => o.id === activeOrderId)) resetWork();
             updateUI(); renderOrders();
             if (reputation <= 0) endGame();
         }
-
-        // 3. 工作进度处理
         if (isWorking && activeOrderId !== null) {
             const order = orders.find(o => o.id === activeOrderId);
             if (order) {
-                workProgress++;
-                playSound('chop');
-                if (workProgress % 5 === 0) {
-                    document.querySelector('.boss-icon').style.transform = `scale(${Math.random()*0.1+0.9})`;
-                }
+                workProgress++; playSound('chop');
+                if (workProgress % 5 === 0) document.querySelector('.boss-icon').style.transform = `scale(${Math.random()*0.1+0.9})`;
                 let pct = (workProgress / order.prepNeeded) * 100;
                 document.getElementById('btn-progress-bar').style.width = pct + '%';
-
                 if (workProgress >= order.prepNeeded) completeOrder(order);
             }
         }
-        
-        // 4. 更新耐心条UI
         orders.forEach(o => {
             const bar = document.getElementById(`bar-${o.id}`);
             if (bar) {
@@ -526,71 +322,43 @@
         });
     }
 
-    // --- 生成订单逻辑 ---
     function scheduleNextSpawn() {
         if (!gameActive) return;
-        
         let delay = 4000; 
-
-        if (gameTimeMin < 1050) {
-            delay = 4000;
-        } else if (gameTimeMin >= 1050 && gameTimeMin < 1110) {
-            // 17:30 - 18:30 加速
-            let progress = (gameTimeMin - 1050) / 60; 
-            delay = 4000 - (3000 * progress);
-        } else if (gameTimeMin >= 1110 && gameTimeMin < 1170) {
-            // 18:30 - 19:30 极速
-            delay = 1000; 
-        } else if (gameTimeMin >= 1170) {
-            delay = 2600;
-        }
-        
+        if (gameTimeMin < 1050) delay = 4000;
+        else if (gameTimeMin >= 1050 && gameTimeMin < 1110) {
+            let progress = (gameTimeMin - 1050) / 60; delay = 4000 - (3000 * progress);
+        } else if (gameTimeMin >= 1110 && gameTimeMin < 1170) delay = 1000; 
+        else if (gameTimeMin >= 1170) delay = 2600;
         delay = delay * (0.8 + Math.random() * 0.4);
-        
-        clearTimeout(spawnTimeout);
-        spawnTimeout = setTimeout(() => { spawnOrder(); scheduleNextSpawn(); }, delay);
+        clearTimeout(spawnTimeout); spawnTimeout = setTimeout(() => { spawnOrder(); scheduleNextSpawn(); }, delay);
     }
 
     function spawnOrder() {
         if (!gameActive) return;
-        
         let rand = Math.random();
         let typeKey = 'WEB'; 
         let isRush = (gameTimeMin >= 1110 && gameTimeMin < 1170);
-
         if (isRush) {
-            if (rand < 0.40) typeKey = 'URGENT';
-            else if (rand < 0.60) typeKey = 'UBER';
-            else if (rand < 0.80) typeKey = 'PHONE';
-            else typeKey = 'WEB';
+            if (rand < 0.40) typeKey = 'URGENT'; else if (rand < 0.60) typeKey = 'UBER';
+            else if (rand < 0.80) typeKey = 'PHONE'; else typeKey = 'WEB';
         } else {
-            if (rand < 0.20) typeKey = 'URGENT';
-            else if (rand < 0.40) typeKey = 'UBER';
-            else if (rand < 0.70) typeKey = 'PHONE';
-            else typeKey = 'WEB';
+            if (rand < 0.20) typeKey = 'URGENT'; else if (rand < 0.40) typeKey = 'UBER';
+            else if (rand < 0.70) typeKey = 'PHONE'; else typeKey = 'WEB';
         }
-
         const t = TYPES[typeKey];
         const newOrder = {
             id: Date.now() + Math.random(),
-            typeKey: typeKey, ...t,
-            maxPatience: t.time, patience: t.time, prepNeeded: t.prep
+            typeKey: typeKey, ...t, maxPatience: t.time, patience: t.time, prepNeeded: t.prep
         };
-        
-        orders.push(newOrder);
-        playSound('new');
-        renderOrders();
+        orders.push(newOrder); playSound('new'); renderOrders();
         if (activeOrderId === null) selectOrder(newOrder.id);
     }
 
-    // --- 时钟与颜色 ---
     function updateClock() {
-        let h = Math.floor(gameTimeMin / 60);
-        let m = gameTimeMin % 60;
+        let h = Math.floor(gameTimeMin / 60); let m = gameTimeMin % 60;
         let timeStr = `${h}:${m < 10 ? '0'+m : m}`;
-        let clockEl = document.getElementById('clock');
-        clockEl.innerText = timeStr;
-        
+        let clockEl = document.getElementById('clock'); clockEl.innerText = timeStr;
         let r = 255, g = 255, b = 255; 
         if (gameTimeMin >= 1050 && gameTimeMin < 1110) {
             let progress = (gameTimeMin - 1050) / 60; 
@@ -604,54 +372,23 @@
             clockEl.style.color = progress < 0.5 ? 'white' : '#333';
         }
         clockEl.style.backgroundColor = `rgb(${r},${g},${b})`;
-        
         if (gameTimeMin >= 1260) winGame();
     }
 
-    // --- 玩家交互 ---
     function selectOrder(id) {
         if (activeOrderId === id) return;
-        activeOrderId = id;
-        resetWork(); renderOrders(); updateButtonState();
+        activeOrderId = id; resetWork(); renderOrders(); updateButtonState();
     }
-
-    function startWork(e) { 
-        if(e && e.cancelable) e.preventDefault(); 
-        if(!activeOrderId) return; 
-        isWorking = true; 
-        document.getElementById('chef-stage').classList.add('cutting'); 
-    }
-    
-    function stopWork(e) { 
-        if(e && e.cancelable) e.preventDefault(); 
-        isWorking = false; 
-        document.getElementById('chef-stage').classList.remove('cutting'); 
-        document.querySelector('.boss-icon').style.transform = 'scale(1)'; 
-    }
-    
-    function resetWork() { 
-        workProgress = 0; 
-        isWorking = false; 
-        document.getElementById('chef-stage').classList.remove('cutting'); 
-        document.getElementById('btn-progress-bar').style.width = '0%'; 
-        updateButtonState(); 
-    }
-
+    function startWork(e) { if(e && e.cancelable) e.preventDefault(); if(!activeOrderId) return; isWorking = true; document.getElementById('chef-stage').classList.add('cutting'); }
+    function stopWork(e) { if(e && e.cancelable) e.preventDefault(); isWorking = false; document.getElementById('chef-stage').classList.remove('cutting'); document.querySelector('.boss-icon').style.transform = 'scale(1)'; }
+    function resetWork() { workProgress = 0; isWorking = false; document.getElementById('chef-stage').classList.remove('cutting'); document.getElementById('btn-progress-bar').style.width = '0%'; updateButtonState(); }
     function completeOrder(order) {
-        score++; playSound('done'); resetWork();
-        orders = orders.filter(o => o.id !== order.id);
-        activeOrderId = null;
-        if (orders.length > 0) {
-            let mostUrgent = [...orders].sort((a,b) => a.patience - b.patience)[0];
-            selectOrder(mostUrgent.id);
-        }
+        score++; playSound('done'); resetWork(); orders = orders.filter(o => o.id !== order.id); activeOrderId = null;
+        if (orders.length > 0) { let mostUrgent = [...orders].sort((a,b) => a.patience - b.patience)[0]; selectOrder(mostUrgent.id); }
         updateUI(); renderOrders();
     }
-
-    // --- 渲染与更新 ---
     function renderOrders() {
-        const list = document.getElementById('order-list');
-        list.innerHTML = '';
+        const list = document.getElementById('order-list'); list.innerHTML = '';
         orders.forEach(o => {
             const el = document.createElement('div');
             el.className = `order-card ${o.color} ${o.id === activeOrderId ? 'active' : ''}`;
@@ -666,34 +403,21 @@
         });
         document.getElementById('order-count').innerText = orders.length;
     }
-
     function updateButtonState() {
-        const btn = document.getElementById('action-btn');
-        const btnText = document.getElementById('btn-text');
-        const sushiVis = document.getElementById('sushi-visual');
+        const btn = document.getElementById('action-btn'); const btnText = document.getElementById('btn-text'); const sushiVis = document.getElementById('sushi-visual');
         if (activeOrderId) {
             const order = orders.find(o => o.id === activeOrderId);
-            if (order) {
-                btn.className = 'ready'; btnText.innerText = `PRÉPARER ${order.label}`; sushiVis.innerText = order.food;
-            }
-        } else {
-            btn.className = ''; btnText.innerText = "SÉLECTIONNEZ UNE COMMANDE"; sushiVis.innerText = '';
-        }
+            if (order) { btn.className = 'ready'; btnText.innerText = `PRÉPARER ${order.label}`; sushiVis.innerText = order.food; }
+        } else { btn.className = ''; btnText.innerText = "SÉLECTIONNEZ UNE COMMANDE"; sushiVis.innerText = ''; }
     }
+    function updateUI() { document.getElementById('score-val').innerText = score; document.getElementById('reputation-display').innerText = '⭐'.repeat(Math.max(0, reputation)); }
 
-    function updateUI() {
-        document.getElementById('score-val').innerText = score;
-        document.getElementById('reputation-display').innerText = '⭐'.repeat(Math.max(0, reputation));
-    }
-
-    // --- 结束逻辑 ---
+    // --- 游戏结束逻辑 ---
     function endGame() {
-        gameActive = false; 
-        clearInterval(gameLoopId); 
-        clearTimeout(spawnTimeout);
+        gameActive = false; clearInterval(gameLoopId); clearTimeout(spawnTimeout);
         
-        // 播放结束音乐 (因为已经在startGame里静音解锁过，这里可以放心播放)
-        endMusic.volume = 1.0; // 确保音量回来
+        // 真正需要播放时，取消静音
+        endMusic.muted = false; 
         endMusic.play().catch(e => console.log("Music failed", e));
 
         showModal("C'est la panique ! 🤯", `
@@ -708,11 +432,10 @@
     }
 
     function winGame() {
-        gameActive = false; 
-        clearInterval(gameLoopId); 
-        clearTimeout(spawnTimeout);
+        gameActive = false; clearInterval(gameLoopId); clearTimeout(spawnTimeout);
         
-        endMusic.volume = 1.0;
+        // 真正需要播放时，取消静音
+        endMusic.muted = false;
         endMusic.play().catch(e => console.log("Music failed", e));
 
         showModal("Service Terminé ! 🎉", `
