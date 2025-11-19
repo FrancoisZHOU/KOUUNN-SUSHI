@@ -2,8 +2,9 @@
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>KOUUNN SUSHI : Le Challenge Ultime (1.5x)</title>
+    <!-- 关键修改：添加 viewport-fit=cover 适配 iPhone 刘海屏和底部 -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>KOUUNN SUSHI : Le Challenge</title>
     <style>
         /* --- 基础布局 --- */
         body {
@@ -12,19 +13,24 @@
             color: white;
             margin: 0;
             padding: 0;
+            /* 关键修改：使用 dvh 动态高度，解决 iOS Safari 地址栏遮挡问题 */
             height: 100vh;
+            height: 100dvh; 
             display: flex;
             flex-direction: column;
             overflow: hidden;
             touch-action: manipulation;
             user-select: none;
             -webkit-user-select: none;
+            -webkit-tap-highlight-color: transparent;
         }
 
         /* --- 顶部 --- */
         header {
             background-color: #e67e22;
-            padding: 15px;
+            padding: 10px 15px;
+            /* 增加顶部安全距离，防止被刘海挡住 */
+            padding-top: calc(10px + env(safe-area-inset-top)); 
             box-shadow: 0 2px 10px rgba(0,0,0,0.3);
             z-index: 10;
             flex-shrink: 0;
@@ -32,20 +38,37 @@
             justify-content: space-between;
             align-items: center;
         }
-        .header-left h1 { margin: 0; font-size: 18px; font-weight: 800; letter-spacing: 1px; }
-        .reputation-stars { color: gold; letter-spacing: 2px; font-size: 14px; }
+        
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 10px; /* Logo和文字的间距 */
+        }
+
+        /* Logo 样式 */
+        .logo-img {
+            width: 45px;
+            height: 45px;
+            object-fit: contain;
+            background: white;
+            border-radius: 50%;
+            border: 2px solid white;
+        }
+
+        .header-text h1 { margin: 0; font-size: 16px; font-weight: 800; letter-spacing: 1px; line-height: 1.2; }
+        .reputation-stars { color: gold; letter-spacing: 2px; font-size: 12px; }
         
         .clock-box {
             background: #fff; 
             color: #333; 
-            padding: 8px 15px;
+            padding: 8px 12px;
             border-radius: 8px; 
             font-weight: 800; 
             font-family: monospace;
-            font-size: 22px;
+            font-size: 20px;
             border: 3px solid #333;
             transition: background-color 0.5s, color 0.5s;
-            min-width: 75px;
+            min-width: 70px;
             text-align: center;
         }
 
@@ -77,6 +100,8 @@
             padding: 8px;
             border: 2px solid #7f8c8d;
             scrollbar-width: thin;
+            /* 增加底部内边距，防止最后一个订单贴太紧 */
+            padding-bottom: 20px; 
         }
 
         .order-card {
@@ -105,7 +130,11 @@
         /* --- 底部厨房 --- */
         #kitchen-area {
             flex-shrink: 0;
-            background: #222; border-radius: 12px; padding: 10px;
+            background: #222; 
+            border-radius: 12px 12px 0 0; /* 底部直角，更贴合 */
+            padding: 10px 15px;
+            /* 关键修改：增加底部安全距离，避开 iPhone 底部横条 */
+            padding-bottom: calc(20px + env(safe-area-inset-bottom)); 
             border-top: 4px solid #e67e22;
             display: flex; flex-direction: column; align-items: center;
             box-shadow: 0 -5px 20px rgba(0,0,0,0.5);
@@ -114,17 +143,17 @@
 
         .chef-stage {
             display: flex; align-items: center; justify-content: center;
-            height: 60px; margin-bottom: 10px; position: relative;
+            height: 50px; margin-bottom: 5px; position: relative;
         }
-        .boss-icon { font-size: 55px; transition: transform 0.1s; }
-        .knife-icon { font-size: 35px; position: absolute; right: -25px; top: 0; opacity: 0; }
+        .boss-icon { font-size: 45px; transition: transform 0.1s; }
+        .knife-icon { font-size: 30px; position: absolute; right: -20px; top: 0; opacity: 0; }
         .cutting .knife-icon { opacity: 1; animation: chop 0.2s infinite alternate; }
         .cutting .boss-icon { transform: scale(0.95); }
         @keyframes chop { from { transform: rotate(0deg) translateY(0); } to { transform: rotate(-30deg) translateY(10px); } }
 
         #action-btn {
-            width: 100%; height: 65px; border: none; border-radius: 35px;
-            background-color: #7f8c8d; color: white; font-size: 22px; font-weight: bold;
+            width: 100%; height: 60px; border: none; border-radius: 35px;
+            background-color: #7f8c8d; color: white; font-size: 20px; font-weight: bold;
             cursor: pointer; position: relative; overflow: hidden;
             box-shadow: 0 4px #555; display: flex; align-items: center; justify-content: center; gap: 10px;
             touch-action: manipulation;
@@ -142,13 +171,21 @@
             display: flex; 
             position: fixed; 
             top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.9); 
-            z-index: 9999; /* 最高层级 */
+            background: rgba(0,0,0,0.95);
+            z-index: 2147483647;
             justify-content: center; align-items: center; padding: 20px;
             box-sizing: border-box;
         }
         .modal-content { background: white; color: #333; padding: 25px; border-radius: 10px; text-align: center; max-width: 360px; width: 100%; position: relative; }
-        .btn-start { background: #e67e22; color: white; border: none; padding: 15px 30px; font-size: 20px; border-radius: 30px; margin-top: 15px; cursor: pointer; width: 100%; font-weight: bold; }
+        
+        .btn-start { 
+            background: #e67e22; color: white; border: none; 
+            padding: 15px 0; font-size: 20px; border-radius: 30px; 
+            margin-top: 15px; cursor: pointer; width: 100%; font-weight: bold;
+            box-shadow: 0 4px #d35400;
+            touch-action: manipulation;
+        }
+        .btn-start:active { transform: translateY(2px); box-shadow: 0 2px #d35400; }
         
         .bowing-icons { font-size: 50px; margin: 10px 0; animation: bounce 2s infinite; }
         @keyframes bounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-5px); } }
@@ -164,8 +201,12 @@
 
 <header>
     <div class="header-left">
-        <h1>👩‍🍳 KOUUNN SUSHI</h1>
-        <div class="reputation-stars" id="reputation-display">⭐⭐⭐⭐⭐</div>
+        <!-- 这里引用了你的 Logo 图片，请确保文件名是 logo.png (或者 logo.jpg) -->
+        <img src="logo.png" alt="Logo" class="logo-img" onerror="this.style.display='none'">
+        <div class="header-text">
+            <h1>KOUUNN SUSHI</h1>
+            <div class="reputation-stars" id="reputation-display">⭐⭐⭐⭐⭐</div>
+        </div>
     </div>
     <div class="clock-box" id="clock">17:30</div>
 </header>
@@ -184,8 +225,10 @@
             <div class="knife-icon">🔪</div>
             <div style="position:absolute; left: -50px; font-size: 45px;" id="sushi-visual">🍣</div>
         </div>
-        <!-- 修复：移除 oncontextmenu 以免干扰操作 -->
-        <button id="action-btn" onmousedown="startWork(event)" ontouchstart="startWork(event)" onmouseup="stopWork(event)" ontouchend="stopWork(event)">
+        <!-- 按钮 -->
+        <button id="action-btn" 
+            ontouchstart="startWork(event)" onmousedown="startWork(event)" 
+            ontouchend="stopWork(event)" onmouseup="stopWork(event)">
             <div class="btn-progress" id="btn-progress-bar"></div>
             <span id="btn-text">SÉLECTIONNEZ...</span>
         </button>
@@ -206,7 +249,7 @@
             </ul>
             <p>👉 <b>Conseil :</b> Servez vite ceux qui attendent depuis longtemps !</p>
         </div>
-        <!-- 使用稳健的 onclick -->
+        <!-- 开始按钮 -->
         <button class="btn-start" onclick="startGame()">OUVRIR LE RESTO</button>
     </div>
 </div>
@@ -234,7 +277,7 @@
     let gameLoopId;
     let spawnTimeout;
 
-    // Audio Context 安全处理
+    // Audio
     const AudioContext = window.AudioContext || window.webkitAudioContext;
     let audioCtx;
     try { audioCtx = new AudioContext(); } catch(e) { console.log("Audio not supported"); }
@@ -242,14 +285,12 @@
     function playSound(type) {
         if (!audioCtx) return;
         if (audioCtx.state === 'suspended') audioCtx.resume().catch(e=>{});
-
         try {
             const osc = audioCtx.createOscillator();
             const gain = audioCtx.createGain();
             osc.connect(gain);
             gain.connect(audioCtx.destination);
             const now = audioCtx.currentTime;
-
             if (type === 'chop') {
                 osc.type = 'square'; osc.frequency.setValueAtTime(150, now);
                 gain.gain.setValueAtTime(0.1, now); osc.start(now); osc.stop(now+0.05);
@@ -286,32 +327,25 @@
 
     function loop() {
         if (!gameActive) return;
-
-        // 时间流速 (1秒 = 10 ticks = 1分钟)
         timeSpeed++;
         if (timeSpeed >= 10) { 
             gameTimeMin++;
             timeSpeed = 0;
             updateClock();
         }
-
-        // 耐心流失 (加速1.5倍: 2 * 1.5 = 3)
         let failed = false;
         orders.forEach(o => {
-            o.patience -= 3; // <--- 1.5倍速度！
+            o.patience -= 3; // 1.5倍速流失
             if (o.patience <= 0) {
                 failed = true; reputation--; playSound('fail');
             }
         });
-
         if (failed) {
             orders = orders.filter(o => o.patience > 0);
             if (!orders.find(o => o.id === activeOrderId)) resetWork();
             updateUI(); renderOrders();
             if (reputation <= 0) endGame();
         }
-
-        // 工作进度
         if (isWorking && activeOrderId !== null) {
             const order = orders.find(o => o.id === activeOrderId);
             if (order) {
@@ -322,12 +356,9 @@
                 }
                 let pct = (workProgress / order.prepNeeded) * 100;
                 document.getElementById('btn-progress-bar').style.width = pct + '%';
-
                 if (workProgress >= order.prepNeeded) completeOrder(order);
             }
         }
-        
-        // UI更新
         orders.forEach(o => {
             const bar = document.getElementById(`bar-${o.id}`);
             if (bar) {
@@ -338,12 +369,10 @@
         });
     }
 
-    // --- 生成速度：1.5倍速逻辑 ---
+    // --- 生成速度 ---
     function scheduleNextSpawn() {
         if (!gameActive) return;
-        
         let delay = 4000; 
-
         if (gameTimeMin < 1050) {
             delay = 4000;
         } else if (gameTimeMin >= 1050 && gameTimeMin < 1110) {
@@ -354,20 +383,16 @@
         } else if (gameTimeMin >= 1170) {
             delay = 2600;
         }
-        
         delay = delay * (0.8 + Math.random() * 0.4);
-        
         clearTimeout(spawnTimeout);
         spawnTimeout = setTimeout(() => { spawnOrder(); scheduleNextSpawn(); }, delay);
     }
 
     function spawnOrder() {
         if (!gameActive) return;
-        
         let rand = Math.random();
         let typeKey = 'WEB'; 
         let isRush = (gameTimeMin >= 1110 && gameTimeMin < 1170);
-
         if (isRush) {
             if (rand < 0.40) typeKey = 'URGENT';
             else if (rand < 0.60) typeKey = 'UBER';
@@ -379,14 +404,12 @@
             else if (rand < 0.70) typeKey = 'PHONE';
             else typeKey = 'WEB';
         }
-
         const t = TYPES[typeKey];
         const newOrder = {
             id: Date.now() + Math.random(),
             typeKey: typeKey, ...t,
             maxPatience: t.time, patience: t.time, prepNeeded: t.prep
         };
-        
         orders.push(newOrder);
         playSound('new');
         renderOrders();
@@ -399,7 +422,6 @@
         let timeStr = `${h}:${m < 10 ? '0'+m : m}`;
         let clockEl = document.getElementById('clock');
         clockEl.innerText = timeStr;
-        
         let r = 255, g = 255, b = 255; 
         if (gameTimeMin >= 1050 && gameTimeMin < 1110) {
             let progress = (gameTimeMin - 1050) / 60; 
@@ -413,7 +435,6 @@
             clockEl.style.color = progress < 0.5 ? 'white' : '#333';
         }
         clockEl.style.backgroundColor = `rgb(${r},${g},${b})`;
-        
         if (gameTimeMin >= 1260) winGame();
     }
 
